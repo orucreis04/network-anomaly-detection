@@ -107,6 +107,8 @@ def predict_anomalies(features_df: pd.DataFrame) -> pd.DataFrame:
         logger.info("No Isolation Forest model found. Training a new model.")
         model = train_model(result_df)
 
+    # Lower raw decision scores are more anomalous. Negating them makes higher
+    # ml_anomaly_score values easier to read as stronger anomaly signals.
     result_df["ml_anomaly_score"] = (-model.decision_function(numeric_df)).round(6)
     result_df["ml_prediction"] = model.predict(numeric_df)
 
